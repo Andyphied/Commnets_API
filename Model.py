@@ -29,9 +29,12 @@ class Category(db.Model):
         self.name = name
 
 
-class CategorySchema(ma.Schema):
-    id = fields.Integer()
-    name = fields.String(required=True)
+class CategorySchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = Category
+
+    id = ma.auto_field()
+    name =ma.auto_field()
 
 
 class CommentSchema(ma.Schema):
