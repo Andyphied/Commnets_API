@@ -29,15 +29,9 @@ class CategoryResource(Resource):
             name=json_data['name']
             )
         session = db.session
-        try:
-            session.add(category)
-            session.commit()
-        except:
-            session.rollback()
-        finally:
-            session.close()
-
-
+        
+        session.add(category)
+        session.commit()
         
         result = category_schema.dump(category).data
 
@@ -55,13 +49,10 @@ class CategoryResource(Resource):
         if not category:
             return ({'message': 'Category does not exists'}, 400)
         session = db.session
-        try:
-            session.query(Category).update(Category.name :data['name'])
-            session.commit()
-        except:
-            session.rollback()
-        finally:
-            session.close()
+    
+        session.query(Category).update({'name': data['name']})
+        session.commit()
+        
 
         category = Category.query.filter_by(id=data['id'])
         result = category_schema.dump(category).data
@@ -83,22 +74,11 @@ class CategoryResource(Resource):
 
         session = db.session
 
-        try:
-            session.query(Category).filter_by(id=data['id']).\
-                delete()
-            session.commit()
-        except:
-            session.rollback()
-        finally:
-            session.close()
+        session.query(Category).filter_by(id=data['id']).\
+            delete()
+        session.commit()
         
         result = category_schema.dump(category).data
 
         return ({ "status": 'success', 'data': result}, 204)
-
-
-
-
-
-            
 
